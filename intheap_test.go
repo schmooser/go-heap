@@ -6,24 +6,21 @@ import (
 	"testing"
 )
 
-func TestMin(t *testing.T) {
+func TestGetMin(t *testing.T) {
 	h := new(IntHeap)
 	h.Direction = Ascending
 	h.Insert(30)
 	h.Insert(10)
 	h.Insert(50)
 
-	_, err := h.Max()
-	assert.NotNil(t, err, "Max() operation is not supported")
+	min, err := h.Get()
 
-	min, err := h.Min()
-
-	assert.Nil(t, err, "Extraction of h.Min()")
+	assert.Nil(t, err, "Extraction of h.Get()")
 	assert.Equal(t, 10, min, "Min value from Heap")
 
 	h.Insert(5)
-	min, err = h.Min()
-	assert.Nil(t, err, "Extraction of h.Min()")
+	min, err = h.Get()
+	assert.Nil(t, err, "Extraction of h.Get()")
 	assert.Equal(t, 5, min, "Min value from Heap")
 
 }

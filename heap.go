@@ -5,6 +5,8 @@ import (
 	//"log"
 )
 
+// Direction holds whether heap returns minimum or maximum on Get and Extract
+// operations.
 type Direction int
 
 const (
@@ -12,12 +14,7 @@ const (
 	Descending
 )
 
-type Heap interface {
-	Insert() error
-	ExtractMin() error
-	ExtractMax() error
-}
-
+// IntHeap structure
 type IntHeap struct {
 	// Direction defines whether heap is ascending or descending
 	Direction Direction
@@ -26,42 +23,28 @@ type IntHeap struct {
 	values []int
 }
 
-func (h *IntHeap) Min() (int, error) {
-	if h.Direction != Ascending {
-		return 0, errors.New("Heap should be of Ascending type to support Min operation")
-	}
-	if len(h.values) == 0 {
-		return 0, errors.New("No min element present")
-	}
-	return h.values[0], nil
-}
-
-func (h *IntHeap) Max() (int, error) {
-	if h.Direction != Descending {
-		return 0, errors.New("Heap should be of Descending type to support Max operation")
-	}
-	if len(h.values) == 0 {
-		return 0, errors.New("No max element present")
+// Get returns root element from the heap. Depending on Direction it could be
+// maximum (for Descending heap) and minimum (for Ascending heap).
+func (h *IntHeap) Get() (int, error) {
+	if h.values == nil {
+		return 0, errors.New("No elements in heap")
 	}
 	return h.values[0], nil
 }
 
+// Extract extracts root element from the heap, which contains minimum or
+// maximum value across values (depending on Direction).
 func (h *IntHeap) Extract() (int, error) {
 
 	if h.values == nil {
 		return 0, errors.New("No more elements in heap")
 	}
-	var val int
-	var err error
-	if h.Direction == Ascending {
-		val, err = h.Min()
-	} else {
-		val, err = h.Max()
-	}
 
+	val, err := h.Get()
 	if err != nil {
 		return 0, err
 	}
+
 	h.swap(0, len(h.values)-1)
 	h.values = h.values[:len(h.values)-1]
 
@@ -102,6 +85,8 @@ func (h *IntHeap) parentIndex(i int) int {
 	}
 }
 
+// childIndexes returns pair of child indexes for given parent. Doesn't check
+// whether these indexes are actually in the Heap.
 func (h *IntHeap) childIndexes(i int) (left, right int) {
 	left = i<<1 + 1
 	right = left + 1
