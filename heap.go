@@ -32,8 +32,9 @@ func (h *IntHeap) Get() (int, error) {
 	return h.values[0], nil
 }
 
-// Extract extracts root element from the heap, which contains minimum or
-// maximum value across values (depending on Direction).
+// Extract returns root element from the heap, which contains minimum or
+// maximum value across values (depending on Direction). It removes returned
+// element from the heap.
 func (h *IntHeap) Extract() (int, error) {
 
 	if h.values == nil {
@@ -93,7 +94,7 @@ func (h *IntHeap) childIndexes(i int) (left, right int) {
 	return
 }
 
-// Insert inserts provided x in the heap h.
+// Insert inserts element in the heap.
 func (h *IntHeap) Insert(x int) error {
 	h.values = append(h.values, x)
 	//defer log.Printf("array = %v", h.values)
